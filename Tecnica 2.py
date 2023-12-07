@@ -1,7 +1,11 @@
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout
+#from tensorflow.keras.models import Sequential
+#from tensorflow.keras.layers import Dense, Dropout
+
+from keras.models import Sequential
+from keras.layers import Dense , Dropout
+
 from sklearn.preprocessing import SMOTE, MinMaxScaler
 
 def load_data(filename):
@@ -67,8 +71,19 @@ class Server:
             for i in range(1, len(global_model.layers)):
                 model.layers[i].set_weights(global_model.layers[i].get_weights())
 
+def evaluate(predictions, labels):
+    # Convertir las predicciones de las clases a etiquetas binarias (0 o 1)
+    predicted_labels = np.argmax(predictions, axis=1)
+
+    # Convertir las etiquetas reales de las clases a etiquetas binarias (0 o 1)
+    true_labels = np.argmax(labels, axis=1)
+
+    # Calcular la precisión
+    accuracy = np.mean(np.equal(predicted_labels, true_labels))
+    return accuracy
+
 # Carga de datos
-data = load_data("data.npz")
+data = load_data("datos.csv")
 
 # División de datos
 train_data, test_data = split_data(data, 0.8)
@@ -108,3 +123,5 @@ Preprocesa los datos para mejorar el rendimiento del modelo.
 Define el modelo, que es una red neuronal profunda con tres capas ocultas.
 Entrena el modelo en el conjunto de entrenamiento.
 Evalúa el modelo en el conjunto de prueba. """
+
+
